@@ -1,3 +1,9 @@
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';        // for authentication
+import 'firebase/compat/storage';     // for storage
+import 'firebase/compat/database';    // for realtime database
+import 'firebase/compat/firestore';   // for cloud firestore
+
 import config from './config'
 
 const firebaseConfig = {
@@ -8,3 +14,9 @@ const firebaseConfig = {
     messagingSenderId: config.firebaseConfig.messagingSenderId,
     appId: config.firebaseConfig.appId
 };
+
+const firebaseApp = firebase.initializeApp(firebaseConfig)
+const db = firebaseApp.firestore()
+const auth = firebase.auth()
+const storage = firebase.storage()
+export { db, auth, storage }
