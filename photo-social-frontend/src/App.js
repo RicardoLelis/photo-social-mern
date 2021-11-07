@@ -123,13 +123,13 @@ function App() {
       </Modal>
       <div className="app__header">
         <img className="app__headerImage" src="logo192.png" alt="Header" />
+        {user ? <Button onClick={() => auth.signOut()}>Logout</Button> : (
+          <div className="app__loginContainer">
+            <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+            <Button onClick={() => setOpen(true)}>Sign Up</Button>
+          </div>
+        )}
       </div>
-      {user ? <Button onClick={() => auth.signOut()}>Logout</Button> : (
-        <div className="app__loginContainer">
-          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-          <Button onClick={() => setOpen(true)}>Sign Up</Button>
-        </div>
-      )}
       <div className="app__posts">
         {posts.map(post => (
           <Post username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
