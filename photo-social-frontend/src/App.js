@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 
 import Post from './components/Post'
+import ImageUpload from './components/ImageUpload'
 import { auth } from './firebase'
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -30,12 +31,12 @@ const useStyles = makeStyles((theme) => ({
 
 
 function App() {
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = useState(false)
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [openSignIn, setOpenSignIn] = useState(false)
   const [user, setUser] = useState(null)
   const [posts, setPosts] = useState([
@@ -64,8 +65,7 @@ function App() {
       unsubscribe()
     }
   }, [user, username])
-
-  const signUp = e => {
+  const signUp = (e) => {
     e.preventDefault()
     auth.createUserWithEmailAndPassword(email, password)
       .then(authUser => authUser.user.updateProfile({ displayName: username }))
@@ -78,7 +78,6 @@ function App() {
     auth.signInWithEmailAndPassword(email, password)
       .catch(error => alert(error.message))
     setOpenSignIn(false)
-
   }
 
   return (
@@ -100,7 +99,7 @@ function App() {
               onChange={e => setEmail(e.target.value)}
             />
             <Input placeholder="password"
-              type="text"
+              type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
             />
@@ -115,11 +114,9 @@ function App() {
               <img className="app__headerImage" src="logo192.png" alt="Header" />
             </center>
             <Input placeholder="email" type="text" value={email}
-              onChange={e => setEmail(e.target.value)}
-            />
+              onChange={e => setEmail(e.target.value)} />
             <Input placeholder="password" type="password" value={password}
-              onChange={e => setPassword(e.target.value)}
-            />
+              onChange={e => setPassword(e.target.value)} />
             <Button type="submit" onClick={signIn}>Sign In</Button>
           </form>
         </div>
@@ -127,20 +124,20 @@ function App() {
       <div className="app__header">
         <img className="app__headerImage" src="logo192.png" alt="Header" />
       </div>
-      {user ? <Button onClick={() => auth.signOut()}>Logout</Button>
-        : (
-          <div className="app__loginContainer">
-            <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-            <Button onClick={() => setOpen(true)}>Sign Up</Button>
-          </div>
-        )}
-
-      {posts.map(post => (
-        <Post username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
-
-      ))}
+      {user ? <Button onClick={() => auth.signOut()}>Logout</Button> : (
+        <div className="app__loginContainer">
+          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+          <Button onClick={() => setOpen(true)}>Sign Up</Button>
+        </div>
+      )}
+      <div className="app__posts">
+        {posts.map(post => (
+          <Post username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
+        ))}
+      </div>
+      {user?.displayName ? <ImageUpload username={user.displayName} /> : <h3 className="app__notLogin">Need to login to upload</h3>}
     </div>
-  );
+  )
 }
 
 export default App;
